@@ -1,4 +1,5 @@
 import User from "../models/User.js";
+import UserProgress from "../models/UserProgress.js";
 import jwt from "jsonwebtoken";
 import bcrypt from "bcryptjs";
 import dotenv from "dotenv";
@@ -33,6 +34,11 @@ export const register = async (req, res) => {
     });
 
     if (user) {
+      const userProgress = new UserProgress({
+        user: user._id,
+        courses: [],
+      });
+      await userProgress.save();
       res.status(201).json({
         _id: user._id,
         username: user.username,

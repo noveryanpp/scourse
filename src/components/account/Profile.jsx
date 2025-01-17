@@ -2,34 +2,18 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { PencilSquareIcon } from "@heroicons/react/24/solid";
 
+import { useUser } from "../../hooks/useUser";
+
 const Profile = () => {
-  const [user, setUser] = useState({});
-  const [loading, setLoading] = useState(true);
+  const { user, loading } = useUser();
 
-  useEffect(() => {
-    const fetchUserProfile = async () => {
-      try {
-        const token = localStorage.getItem("token");
-        if (!token) {
-          setLoading(false);
-          return;
-        }
-
-        const response = await axios.get("http://20.255.59.99:45/api/auth/profile", {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        });
-
-        setUser(response.data);
-      } catch (error) {
-        console.error("Error fetching user profile:", error);
-      } finally {
-        setLoading(false);
-      }
-    };
-    fetchUserProfile();
-  }, []);
+  if (loading) {
+    return(
+      <div className="flex items-center justify-center w-full p-4">
+        <div className="animate-spin rounded-full h-8 w-8 border-t-2 border-b-2 border-indigo-500"></div>
+      </div>
+    )
+  };
 
   return (
     <div className="bg-gradient-to-r from-cyan-600 to-sky-600 flex pt-12 md:pt-20 xl:pt-28 pb-6">

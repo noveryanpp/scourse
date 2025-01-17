@@ -12,6 +12,7 @@ import {
 } from "@heroicons/react/24/outline";
 import PageHead from "../components/layout/PageHead";
 import Sidebar from "../components/layout/Sidebar";
+import { API_URL } from "../utils/constants";
 
 export default function CourseBuilder() {
   // Page Header
@@ -53,7 +54,7 @@ export default function CourseBuilder() {
         }
 
         const response = await axios.get(
-          "http://20.255.59.99:45/api/auth/profile",
+          `${API_URL}/api/auth/profile`,
           {
             headers: {
               Authorization: `Bearer ${token}`,
@@ -150,7 +151,7 @@ export default function CourseBuilder() {
       // Post new course data
       const response = await axios({
         method: "post",
-        url: "http://20.255.59.99:45/api/courses",
+        url: `${API_URL}/api/courses`,
         data: requestData,
         headers: {
           "Content-Type": "application/json",

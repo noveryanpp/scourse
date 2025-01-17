@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 import { UserPlusIcon } from "@heroicons/react/24/outline";
+import { API_URL } from "../../utils/constants";
 
 function Register() {
   const [formData, setFormData] = useState({
@@ -64,7 +65,7 @@ function Register() {
 
       const response = await axios({
         method: 'post',
-        url: 'http://20.255.59.99:45/api/auth/register',
+        url: `${API_URL}/api/auth/register`,
         data: requestData,
         headers: {
           'Content-Type': 'application/json',

@@ -1,6 +1,4 @@
 import User from "../models/User.js";
-import UserProgress from "../models/UserProgress.js";
-// require("../middleware/userMiddleware");
 
 // Get all users
 export const getUsers = async (req, res) => {
@@ -33,35 +31,6 @@ export const createUser = async (req, res) => {
     const newUser = await user.save();
     res.status(201).json(newUser);
   } catch (error) {
-    res.status(400).json({ message: error.message });
-  }
-};
-
-export const createUserProgress = async (req, res) => {
-  try {
-    const checkUserProgress = await UserProgress.findOne({ user: req.user._id });
-    if (!checkUserProgress && user.role === "student") {
-      const userProgress = new UserProgress({
-        user: req.user._id,
-      });
-      await userProgress.save();
-      console.log("UserProgress document created:", userProgress);
-    }
-  } catch (err) {
-    res.status(400).json({ message: error.message });
-  }
-};
-
-export const getUserProgress = async (req, res) => {
-  try{
-    const userId = new mongoose.Types.ObjectId(req.params.id)
-    const userProgress = await UserProgress.findOne({ user : userId });
-    if (userProgress) {
-      res.json(userProgress);
-    } else {
-      res.status(404).json({ message: "User Progress not found" });
-    };
-  } catch (err) {
     res.status(400).json({ message: error.message });
   }
 };

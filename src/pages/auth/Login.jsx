@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { ArrowRightEndOnRectangleIcon } from "@heroicons/react/24/outline";
+import { API_URL } from "../../utils/constants";
 
 function Login() {
   const [userCredential, setUserCredential] = useState("");
@@ -13,7 +14,7 @@ function Login() {
     let credential = userCredential.trim().toLowerCase();
     e.preventDefault();
     try {
-      const res = await axios.post("http://20.255.59.99:45/api/auth/login", {
+      const res = await axios.post(`${API_URL}/api/auth/login`, {
         credential,
         password,
       });

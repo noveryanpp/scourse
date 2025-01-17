@@ -3,37 +3,12 @@ import { Link, useLocation } from "react-router-dom";
 import axios from "axios";
 import { Bars3Icon, XMarkIcon, HomeIcon, AcademicCapIcon, ChartBarIcon, ShoppingBagIcon, StarIcon, UserIcon, ChatBubbleLeftIcon, BellIcon } from "@heroicons/react/24/outline";
 
+import { useUser } from "../../hooks/useUser"
+
 function Sidebar() {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const location = useLocation();
-  const [user, setUser] = useState({});
-  const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-    const fetchUserProfile = async () => {
-      try {
-        const token = localStorage.getItem("token");
-        if (!token) {
-          setLoading(false);
-          return;
-        }
-
-        const response = await axios.get("http://20.255.59.99:45/api/auth/profile", {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        });
-
-        setUser(response.data);
-      } catch (error) {
-        console.error("Error fetching user profile:", error);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchUserProfile();
-  }, []);
+  const {user, loading} = useUser();
 
   const menuItems = [
     { name: "Home", path: "/home", icon: HomeIcon },

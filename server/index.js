@@ -3,8 +3,12 @@ import mongoose from "mongoose";
 import cors from "cors";
 import authRoutes from "./routes/authRoutes.js";
 import courseRoutes from "./routes/courseRoutes.js";
-import userRoutes from "./routes/userRoutes.js";
+import paymentRoutes from "../routes/paymentRoutes.js";
 import bodyParser from "body-parser";
+import dotenv from 'dotenv'
+import path from 'path'
+
+dotenv.config({ path: path.resolve('../.env') });
 
 const app = express();
 
@@ -26,7 +30,7 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
 // MongoDB Connection
-const uri = "mongodb+srv://zhendevss:atrOF5EhdxsUN7Pb@scourse.f4ls5.mongodb.net/scourse?retryWrites=true&w=majority";
+const uri = process.env.MONGODB_URI;
 
 mongoose
   .connect(uri)
@@ -39,7 +43,7 @@ mongoose
 // Routes
 app.use("/api/auth", authRoutes);
 app.use("/api/courses", courseRoutes);
-app.use("/api/user", userRoutes);
+app.use("/api/payment", paymentRoutes);
 
 // Error handling middleware
 app.use((err, req, res, next) => {
@@ -58,7 +62,7 @@ app.use((req, res) => {
 });
 
 // Start server
-const PORT = 5000;
+const PORT = process.env.PORT;
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
 });

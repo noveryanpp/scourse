@@ -4,12 +4,14 @@ import axios from "axios";
 import Sidebar from "../components/layout/Sidebar";
 import PageHead from "../components/layout/PageHead";
 import CourseCard from "../components/card/CourseCard";
+import { API_URL } from "../utils/constants";
+
+import { useUser } from "../hooks/useUser"
 
 const Home = () => {
-  const [user, setUser] = useState(null);
+  const {user, loading} = useUser();
   const [userProgress, setUserProgress] = useState(null);
   const [courses, setCourses] = useState([]);
-  const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const navigate = useNavigate();
 
@@ -17,37 +19,12 @@ const Home = () => {
   const pageDescription = "Welcome to Scourse!";
   const pageHeadBackground = "from-blue-600 via-purple-600 to-indigo-600";
 
-  useEffect(() => {
-    const fetchUserProfile = async () => {
-      try {
-        const token = localStorage.getItem("token");
-        if (!token) {
-          console.log("No token found, redirecting to login");
-          navigate("/login");
-          return;
-        }
-
-        const response = await axios.get("http://20.255.59.99:45/api/auth/profile", {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        });
-
-        setUser(response.data);
-      } catch (error) {
-        console.error("Error fetching user profile:", error);
-      } finally {
-        setLoading(false);
-      }
-    };
-    fetchUserProfile();
-  }, [navigate]);
 
   useEffect(() => {
     const fetchCourses = async () => {
       const token = localStorage.getItem("token");
       try {
-        const response = await axios.get(`http://20.255.59.99:45/api/courses/${user._id}/ownedCourses`, {
+        const response = await axios.get(`${API_URL}/api/courses/${user._id}/ownedCourses`, {
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -56,37 +33,10 @@ const Home = () => {
       } catch (err) {
         setError("Failed to fetch courses");
         console.error("Error fetching courses:", err);
-      } finally {
-        setLoading(false);
       }
     };
-    // const createUserProgress = async () => {
-    //   const token = localStorage.getItem("token");
-    //   try {
-    //     const response = await axios.post('http://20.255.59.99:45/api/user/progress');
-    //   } catch (err) {
-    //     setError("Failed to create user progress");
-    //     console.error("Error creating user progress:", err);
-    //   }
-    // };
-    // const fetchUserProgress = async () => {
-    //   const token = localStorage.getItem("token");
-    //   try {
-    //     const response = await axios.get(`http://20.255.59.99:45/api/user/${user._id}/progress`);
-    //     setUserProgress(response.data);
-    //   } catch (err) {
-    //     setError("Failed to fetch user progress");
-    //     console.error("Error fetching user progress:", err);
-    //     if(err.status == 404){
-    //       createUserProgress();
-    //     }
-    //   } finally {
-    //     setLoading(false);
-    //   }
-    // }
     if (!loading) {
       fetchCourses();
-      // fetchUserProgress();
     }
   }, [user]);
 

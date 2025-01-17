@@ -3,6 +3,7 @@ import axios from "axios";
 import Sidebar from "../components/layout/Sidebar";
 import PageHead from "../components/layout/PageHead";
 import CourseCard from "../components/card/CourseCard";
+import { API_URL } from "../utils/constants";
 
 import { MagnifyingGlassIcon, ChevronDoubleLeftIcon, XMarkIcon } from "@heroicons/react/24/outline";
 
@@ -32,7 +33,7 @@ const Courses = () => {
   useEffect(() => {
     const fetchCourses = async () => {
       try {
-        const response = await axios.get("http://20.255.59.99:45/api/courses");
+        const response = await axios.get(`${API_URL}/api/courses`);
         setCourses(response.data);
         setLoading(false);
       } catch (err) {

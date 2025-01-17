@@ -7,6 +7,7 @@ import {
   BoltIcon,
   ClockIcon,
 } from "@heroicons/react/24/solid";
+import { API_URL } from "../../utils/constants";
 
 const CourseHead = () => {
   const { id } = useParams();
@@ -19,7 +20,7 @@ const CourseHead = () => {
       const token = localStorage.getItem("token");
       try {
         const response = await axios.get(
-          `http://20.255.59.99:45/api/courses/${id}`,
+          `${API_URL}/api/courses/${id}`,
           {
             headers: {
               Authorization: `Bearer ${token}`,
@@ -64,7 +65,7 @@ const CourseHead = () => {
 
       const response = await axios({
         method: "post",
-        url: `http://20.255.59.99:45/api/courses/${id}/enroll`,
+        url: `${API_URL}/api/courses/${id}/enroll`,
         headers: {
           "Content-Type": "application/json",
           Accept: "application/json",

@@ -10,7 +10,6 @@ export const isEnrolled = async (req, res, next) => {
     return res.status(200).json({ message: "You're enrolled in this course" });
     next();
   } else {
-    console.log("nawh");
     return res
       .status(200)
       .json({ message: "You're not enrolled in this course" });

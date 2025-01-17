@@ -4,76 +4,45 @@ import { Link, useNavigate } from "react-router-dom";
 import Sidebar from "../components/layout/Sidebar";
 import PageHead from "../components/layout/PageHead";
 import { PencilSquareIcon, TrashIcon } from "@heroicons/react/24/outline";
+import { API_URL } from "../utils/constants";
+
+import { useUser } from "../hooks/useUser"
+
+
 
 const Dashboard = () => {
+  const {user, loading} = useUser();
   const pageTitle = "Dashboard";
   const pageDescription = "Manage your Courses!!!";
   const pageHeadBackground = "from-purple-600 to-pink-600";
 
-  const [user, setUser] = useState(null);
   const [courses, setCourses] = useState([]);
-  const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
   const navigate = useNavigate();
 
-  useEffect(() => {
-    const fetchUserProfile = async () => {
-      try {
-        const token = localStorage.getItem("token");
-        if (!token) {
-          console.log("No token found, redirecting to login");
-          navigate("/login");
-          return;
-        }
-
-        const response = await axios.get("http://20.255.59.99:45/api/auth/profile", {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        });
-
-        setUser(response.data);
-
-        if (response.data.role !== "instructor") {
-          console.log("User is not an instructor, redirecting to /home");
-          navigate("/home");
-        } else {
-          console.log("User is an instructor, access granted to Dashboard");
-        }
-      } catch (error) {
-        console.error("Error fetching user profile:", error);
-        navigate("/courses");
-      } finally {
-        setLoading(false);
-      }
-    };
-    const fetchCourses = async () => {
-      const token = localStorage.getItem("token");
-      try {
-        const response = await axios.get(`http://20.255.59.99:45/api/courses/${user._id}/ownedCourses`, {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        });
-        setCourses(response.data);
-      } catch (err) {
-        setError("Failed to fetch courses");
-        console.error("Error fetching courses:", err);
-      } finally {
-        setLoading(false);
-      }
-    };
-    fetchUserProfile();
-    fetchCourses();
-  }, [navigate]);
-
-
-
-  useEffect(() => {
-    if (user && user.role === "instructor") {
-      fetchCourses();
+  const fetchCourses = async () => {
+    const token = localStorage.getItem("token");
+    try {
+      const response = await axios.get(`${API_URL}/api/courses/${user._id}/ownedCourses`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      setCourses(response.data);
+    } catch (err) {
+      console.error("Error fetching courses:", err);
     }
-  }, [user]);
+  };
+
+  useEffect(() => {
+    if (user && user.role !== "instructor") {
+      console.log("User is not an instructor, redirecting to /home");
+      navigate("/home");
+    } else if (user) {
+      fetchCourses();
+      console.log("User is an instructor, access granted to Dashboard");
+    };
+  }, [loading]);
 
   if (loading) return <div>Loading...</div>;
 
@@ -82,7 +51,7 @@ const Dashboard = () => {
     try {
       const response = await axios({
         method: "delete",
-        url: `http://20.255.59.99:45/api/courses/${courseId}`,
+        url: `${API_URL}/api/courses/${courseId}`,
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -105,7 +74,7 @@ const Dashboard = () => {
           <div className="flex w-full">
             <div className="flex-auto relative">
               <div className="flex items-center justify-between mt-8 mb-5 mx-2 text-gray-900">
-                <h2 className="text-4xl font-semibold text-center">{user?._id}</h2>
+                <h2 className="text-4xl font-semibold text-center">Your Courses</h2>
               </div>
               <div className="relative bg-white backdrop-blur-sm rounded-3xl p-8 border border text-gray-900">
                 <div className="space-y-3">

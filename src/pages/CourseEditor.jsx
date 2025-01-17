@@ -7,6 +7,7 @@ import "react-quill/dist/quill.snow.css";
 import { ChevronLeftIcon, DocumentTextIcon, PlusIcon, TrashIcon } from "@heroicons/react/24/outline";
 import PageHead from "../components/layout/PageHead";
 import Sidebar from "../components/layout/Sidebar";
+import { API_URL } from "../utils/constants";
 
 export default function CourseEditor() {
   // Page Header
@@ -52,7 +53,7 @@ export default function CourseEditor() {
           return;
         }
 
-        const response = await axios.get("http://20.255.59.99:45/api/auth/profile", {
+        const response = await axios.get(`${API_URL}/api/auth/profile`, {
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -70,7 +71,7 @@ export default function CourseEditor() {
   useEffect(() => {
     const loadCourseData = async () => {
       try {
-        const response = await axios.get(`http://20.255.59.99:45/api/courses/${id}`);
+        const response = await axios.get(`${API_URL}/api/courses/${id}`);
         setCourse(response.data);
       } catch (err) {
         setError("Failed to fetch course details");
@@ -162,7 +163,7 @@ export default function CourseEditor() {
       // Post new course data
       const response = await axios({
         method: "put",
-        url: `http://20.255.59.99:45/api/courses/${id}`,
+        url: `${API_URL}/api/courses/${id}`,
         data: requestData,
         headers: {
           "Content-Type": "application/json",

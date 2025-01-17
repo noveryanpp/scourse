@@ -8,6 +8,25 @@ const itemSchema = new mongoose.Schema(
     },
     description: {
       type: String,
+    },
+    price: {
+      priceType: {
+        type: String,
+        required: true,
+        enum: ["Free", "Scoin", "Scash"],
+      },
+      amount: {
+        type: Number,
+        required: true,
+      },
+    },
+    category: {
+      type: String,
+      enum: ["scoin", "scash", "booster", "avatar"],
+      required: true,
+    },
+    image: {
+      type: String,
       required: true,
     },
     attribute: {

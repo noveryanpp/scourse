@@ -1,4 +1,5 @@
 import jwt from 'jsonwebtoken'
+import dotenv from 'dotenv'
 import User from '../models/User.js'
 
 export const protect = async (req, res, next) => {
@@ -13,7 +14,7 @@ export const protect = async (req, res, next) => {
       token = req.headers.authorization.split(' ')[1]
 
       // Verify token
-      const decoded = jwt.verify(token, process.env.JWT_SECRET || 'scourse_secret_key_2024')
+      const decoded = jwt.verify(token, process.env.JWT_SECRET)
 
       // Get user from token
       req.user = await User.findById(decoded.id).select('-password')
