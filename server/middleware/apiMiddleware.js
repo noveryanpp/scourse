@@ -1,9 +1,15 @@
-const apiKey = "scourse_api_key_2024";
+import dotenv from "dotenv";
+import path from "path";
+
+dotenv.config({ path: path.resolve("../.env") });
+
+const apiKey = process.env.API_KEY
+
 
 export const apiMiddleware = (req, res, next) => {
     if (
-        req.headers.x-api-key &&
-        req.headers.x-api-key == apiKey
+        req.headers['x-api-key'] &&
+        req.headers['x-api-key'] == apiKey
     ) {
         next();
     } else {

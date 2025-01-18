@@ -14,11 +14,6 @@ import {
   deleteReview,
   getUserCourses,
   getCourseSection,
-  // addLesson,
-  // getLessonById,
-  // updateLesson,
-  // deleteLesson,
-  // reorderLessons,
 } from "../controllers/courseController.js";
 
 const router = express.Router();

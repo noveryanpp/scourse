@@ -1,9 +1,9 @@
 import express from 'express'
-const { purchase, notification } = require('../controllers/paymentController');
+import { purchase, notification } from '../controllers/paymentController.js';
 
 const router = express.Router();
 
 router.post('/purchase', purchase);
 router.post('/notification', notification);
 
-module.exports = router;
+export default router;

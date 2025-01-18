@@ -48,24 +48,6 @@ const Home = () => {
           <PageHead pageTitle={pageTitle} pageHeadBackground={pageHeadBackground} pageDescription={pageDescription} />
         </div>
         <div className="mx-auto py-6 px-2 md:pl-20 2xl:px-8">
-          {/* <div className="max-w-7xl flex flex-col mx-auto justify-left mb-6">
-            <h2 className="text-2xl text-gray-900 font-semibold ml-2">Last Accessed Courses</h2>
-            <div className="flex flex-nowrap overflow-x-auto scroll-smooth scroll-pl-0 overscroll-x-contain snap-x gap-2 py-4">
-              {loading ? (
-                <div className="flex items-center justify-center w-full p-4">
-                  <div className="animate-spin rounded-full h-8 w-8 border-t-2 border-b-2 border-indigo-500"></div>
-                </div>
-              ) : error ? (
-                <div className="text-red-500 p-4">{error}</div>
-              ) : (
-                courses.map((course) => (
-                  <div key={course._id} className="flex-none snap-start w-80">
-                    <CourseCard course={course} />
-                  </div>
-                ))
-              )}
-            </div>
-          </div> */}
 
           <div className="max-w-7xl flex flex-col mx-auto justify-left">
             <div className="flex flex-row justify-between">

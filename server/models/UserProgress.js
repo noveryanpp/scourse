@@ -27,7 +27,7 @@ const userProgressSchema = new mongoose.Schema({
   avatars: [
     {
       type: mongoose.Schema.Types.ObjectId,
-      ref: "Avatar",
+      ref: "Item",
     },
   ],
   achievements: [
@@ -38,7 +38,7 @@ const userProgressSchema = new mongoose.Schema({
   ],
   courses: [
     {
-      course: {
+      courseId: {
         type: mongoose.Schema.Types.ObjectId,
         ref: "Course",
         required: true,

@@ -3,7 +3,9 @@ import mongoose from "mongoose";
 import cors from "cors";
 import authRoutes from "./routes/authRoutes.js";
 import courseRoutes from "./routes/courseRoutes.js";
-import paymentRoutes from "../routes/paymentRoutes.js";
+import paymentRoutes from "./routes/paymentRoutes.js";
+import userProgressRoutes from "./routes/userProgressRoutes.js";
+import itemRoutes from "./routes/itemRoutes.js";
 import bodyParser from "body-parser";
 import dotenv from 'dotenv'
 import path from 'path'
@@ -43,7 +45,9 @@ mongoose
 // Routes
 app.use("/api/auth", authRoutes);
 app.use("/api/courses", courseRoutes);
-app.use("/api/payment", paymentRoutes);
+app.use("/api/payment/", paymentRoutes);
+app.use("/api/item", itemRoutes);
+app.use("/api/progress", userProgressRoutes);
 
 // Error handling middleware
 app.use((err, req, res, next) => {

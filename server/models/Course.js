@@ -63,7 +63,7 @@ const courseSchema = new mongoose.Schema(
       required: true,
     },
     price: {
-      priceType: {
+      currency: {
         type: String,
         required: true,
         enum: ["Free", "Scoin", "Scash"],
