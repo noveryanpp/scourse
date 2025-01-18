@@ -6,7 +6,7 @@ import midtransClient from "midtrans-client";
 import dotenv from "dotenv";
 import path from "path";
 
-dotenv.config({ path: path.resolve("../.env") });
+dotenv.config({ path: path.resolve(".env") });
 
 let snap = new midtransClient.Snap({
   isProduction: false,
@@ -56,37 +56,38 @@ export const purchase = async (req, res) => {
   }
 };
 
-
 export const notification = async (req, res) => {
   const { order_id, transaction_status, fraud_status, gross_amount, merchant_id } = req.body;
   const slicedId = order_id.split("-");
-  const user = await User.findOne({ username: slicedId[0] });
-  const purchaseDetails = {
-    userId: user._id,
-    itemId: slicedId[1],
-    amount: slicedId[2],
-  };
+  const apiKey = process.env.API_KEY;
 
-  if (mechant_id === process.env.MIDTRANS_MERCHANT_ID) {
-    if (transaction_status === "settlement" || transaction_status === "capture") {
-      if (fraud_status === "accept") {
-        try {
-            const response = await axios({
-                method: "post",
-                url: `${process.env.BACKEND_SERVER}/progress/${userId}/additem/${itemId}`,
-                body: {
-                    amount: amount
-                },
-                headers: {
-                  "x-api-key": process.env.API_KEY,
-                },
-              });
-        } catch (error) {
-            res.status(400).json({ message: error.message });
+  try {
+    const user = await User.findOne({ username: slicedId[0] });
+    const purchaseDetails = {
+      userId: user._id,
+      itemId: slicedId[1],
+      amount: slicedId[2],
+    };
+
+    if (merchant_id === process.env.MIDTRANS_MERCHANT_ID) {
+      if (transaction_status === "settlement" || transaction_status === "capture") {
+        if (fraud_status === "accept") {
+          const response = await axios({
+            method: "post",
+            url: `${process.env.API_URL}/api/progress/${purchaseDetails.userId}/additem/${purchaseDetails.itemId}`,
+            headers: {
+              "Content-Type": "application/json",
+              "x-api-key": apiKey,
+            },
+            data: {
+              amount: purchaseDetails.amount,
+            },
+          });
+          res.status(200).json({ message: "Success" });
         }
       }
     }
+  } catch (error) {
+    res.status(400).json({ message: error });
   }
-
-  res.sendStatus(200);
 };

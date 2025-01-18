@@ -3,8 +3,8 @@ import axios from 'axios';
 import { Modal } from "flowbite-react";
 import { CircleStackIcon, BanknotesIcon, BoltIcon } from "@heroicons/react/16/solid";
 
-import { useUser } from "../../hooks/useUser.js"
-import { MIDTRANS_CLIENT_KEY, API_URL } from "../../utils/constants.js";
+import { useUser } from "../../hooks/useUser"
+import { MIDTRANS_CLIENT_KEY, API_URL } from "../../utils/constants";
 
 
 const ItemCard = ({ item }) => {

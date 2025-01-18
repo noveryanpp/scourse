@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 import { UserPlusIcon } from "@heroicons/react/24/outline";
-import { API_URL } from "../../utils/constants";
+import { MIDTRANS_CLIENT_KEY, API_URL } from "../../utils/constants";
 
 function Register() {
   const [formData, setFormData] = useState({

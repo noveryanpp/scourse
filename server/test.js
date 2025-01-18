@@ -22,10 +22,16 @@
 
 // return <button onClick={handlePayment}>Buy Coins</button>;
 
-let updateQuery = {};
+// let updateQuery = {};
 
-updateQuery = { $inc: { scoins: -100 } }
+// updateQuery = { $inc: { scoins: -100 } }
 
-updateQuery.$push = { items: 1 }
+// updateQuery.$push = { items: 1 }
 
-console.log(updateQuery)
+// console.log(updateQuery)
+
+import dotenv from 'dotenv'
+
+dotenv.config();
+
+console.log(process.env.PORT)

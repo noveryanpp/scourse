@@ -1,9 +1,8 @@
 import dotenv from "dotenv";
-import path from 'path'
+import path from "path";
 
-dotenv.config({ path: path.resolve('../.env') });
+dotenv.config({ path: path.resolve(".env") });
 
 const server = process.env.MIDTRANS_SERVER_KEY;
 
-
-console.log(server)
+console.log(server);

@@ -6,10 +6,10 @@ import PageHead from "../components/layout/PageHead";
 import CourseCard from "../components/card/CourseCard";
 import { API_URL } from "../utils/constants";
 
-import { useUser } from "../hooks/useUser"
+import { useUser } from "../hooks/useUser";
 
 const Home = () => {
-  const {user, loading} = useUser();
+  const { user, loading } = useUser();
   const [userProgress, setUserProgress] = useState(null);
   const [courses, setCourses] = useState([]);
   const [error, setError] = useState(null);
@@ -18,7 +18,6 @@ const Home = () => {
   const pageTitle = "Home";
   const pageDescription = "Welcome to Scourse!";
   const pageHeadBackground = "from-blue-600 via-purple-600 to-indigo-600";
-
 
   useEffect(() => {
     const fetchCourses = async () => {
@@ -48,7 +47,6 @@ const Home = () => {
           <PageHead pageTitle={pageTitle} pageHeadBackground={pageHeadBackground} pageDescription={pageDescription} />
         </div>
         <div className="mx-auto py-6 px-2 md:pl-20 2xl:px-8">
-
           <div className="max-w-7xl flex flex-col mx-auto justify-left">
             <div className="flex flex-row justify-between">
               <h2 className="text-2xl text-gray-900 font-semibold mx-2">My Courses</h2>

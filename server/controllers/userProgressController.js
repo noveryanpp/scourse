@@ -17,7 +17,7 @@ export const getUserProgress = async (req, res) => {
 
 export const getAllUserProgress = async (req, res) => {
   try {
-    const userProgress = await UserProgress.find({});
+    const userProgress = await UserProgress.findOne({ user: req.params.id});
     if (userProgress) {
       res.json(userProgress);
     } else {
@@ -137,11 +137,11 @@ export const addItem = async (req, res) => {
         { new: true } // Return the updated document
       );
       res.json({ message: "Item Added to Inventory" });
-    } catch (err) {
-      res.status(400).json({ message: error.message });
+    } catch (error) {
+      res.status(400).json({ message: error });
     }
-  } catch (err) {
-    res.status(400).json({ message: error.message });
+  } catch (error) {
+    res.status(400).json({ message: error });
   }
 };
 

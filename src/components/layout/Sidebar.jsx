@@ -1,14 +1,32 @@
 import React, { useState, useEffect } from "react";
 import { Link, useLocation } from "react-router-dom";
 import axios from "axios";
-import { Bars3Icon, XMarkIcon, HomeIcon, AcademicCapIcon, ChartBarIcon, ShoppingBagIcon, StarIcon, UserIcon, ChatBubbleLeftIcon, BellIcon } from "@heroicons/react/24/outline";
-
-import { useUser } from "../../hooks/useUser"
+import { Bars3Icon, XMarkIcon, HomeIcon, AcademicCapIcon, ChartBarIcon, ShoppingBagIcon, StarIcon, UserIcon, ChatBubbleLeftIcon, BellIcon, CircleStackIcon, BanknotesIcon, BoltIcon } from "@heroicons/react/24/outline";
+import { API_URL } from '../../utils/constants'
+import { useUser, useUserProgress } from "../../hooks/useUser";
 
 function Sidebar() {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const location = useLocation();
-  const {user, loading} = useUser();
+  const { user, loading } = useUser();
+  const [loadingUserProgress, setLoadingUserProgress] = useState(true)
+  const [userProgress, setUserProgress] = useState([]);
+
+  useEffect(() => {
+    if (!loading) {
+      const fetchUserProgress = async () => {
+        try {
+          const response = await axios.get(`${API_URL}/api/progress/${user._id}`);
+          setUserProgress(response.data);
+          setLoadingUserProgress(false);
+        } catch (error) {
+          console.error("Error fetching user progress:", error);
+        }
+      }
+      fetchUserProgress();
+    }
+  }, [loading]);
+
 
   const menuItems = [
     { name: "Home", path: "/home", icon: HomeIcon },
@@ -38,6 +56,16 @@ function Sidebar() {
             </div>
 
             <div className="flex items-center gap-4">
+              {!loadingUserProgress ? 
+                <div className="flex flex-wrap grap-2 text-gray-900 text-md">
+                  <div className="mx-2"><BoltIcon className="2-6 h-6 inline"/>{userProgress.scores}</div>
+                  <div className="mx-2"><CircleStackIcon className="2-6 h-6 inline"/>{userProgress.scoins}</div>
+                  <div className="mx-2"><BanknotesIcon className="2-6 h-6 inline"/>{userProgress.scashes}</div>
+                </div> 
+                  : 
+                <div>Loading...</div>
+              }
+
               <Link to="/account" className="flex items-center gap-3 p-1.5 rounded-xl hover:bg-blue-50 transition-all duration-200">
                 <span className="hidden md:block text-sm font-medium text-gray-700">{loading ? "Loading..." : user.fullName || "Guest"}</span>
                 <div className="relative">
@@ -72,14 +100,6 @@ function Sidebar() {
               );
             })}
           </nav>
-
-          <div className={`absolute bottom-0 left-0 right-0 p-4 ${isSidebarOpen ? "translate-x-0" : "-translate-x-64"} duration-300`}>
-            <div className="bg-blue-50 rounded-xl p-4">
-              <h3 className="text-sm font-medium text-blue-800">Need Help?</h3>
-              <p className="mt-1 text-xs text-blue-600">Contact our support team</p>
-              <button className="mt-3 w-full px-4 py-2 text-sm font-medium text-white bg-blue-600 rounded-lg hover:bg-blue-700 transition-colors duration-200">Get Support</button>
-            </div>
-          </div>
         </div>
       </div>
 
