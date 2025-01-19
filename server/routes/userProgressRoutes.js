@@ -1,5 +1,6 @@
 import express from "express";
 import { apiMiddleware } from "../middleware/apiMiddleware.js";
+import { protect } from "../middleware/authMiddleware.js";
 import {
   getAllUserProgress,
   getUserProgress,
@@ -7,6 +8,7 @@ import {
   purchaseCourse,
   addItem,
   addScores,
+  updateCourseProgress,
   // updateUserProgress,
 } from "../controllers/userProgressController.js";
 
@@ -15,13 +17,17 @@ const router = express.Router();
 router.get("/", getAllUserProgress);
 router.get("/:id", getUserProgress);
 
+
+router.post("/:userId/additem/:itemId", apiMiddleware, addItem);
+router.post("/:userId/addscores/:amount", apiMiddleware, addScores);
+
+router.use(protect);
+
+router.post("/:courseId/finishsection", updateCourseProgress);
 router.post("/:userId/purchaseitem/:itemId", purchaseItem);
-router.post("/:userId/purchasecourse/:courseId", purchaseCourse);
+router.post("/purchasecourse/:id", purchaseCourse);
 
-router.use(apiMiddleware);
 
-router.post("/:userId/additem/:itemId", addItem);
-router.post("/:userId/addscores/:amount", addScores);
 
 // router.put('/:id/', updateUserProgress);
 export default router;

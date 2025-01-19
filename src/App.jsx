@@ -9,6 +9,7 @@ import Quests from "./pages/Quests";
 import Account from "./pages/Account";
 import Forum from "./pages/Forum";
 import Login from "./pages/auth/Login";
+import Logout from "./pages/auth/Logout";
 import Register from "./pages/auth/Register";
 import Role from "./pages/auth/Role";
 import Course from "./pages/Course";
@@ -22,7 +23,6 @@ function App() {
     <Router>
       <Routes>
         <Route path="/" element={<Landing />} />
-        
         <Route path="/home" element={<Home />} />
         <Route path="/leaderboard" element={<Leaderboard />} />
         <Route path="/dashboard" element={<Dashboard />} />
@@ -32,6 +32,7 @@ function App() {
         <Route path="/forum" element={<Forum />} />
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
+        <Route path="/logout" element={<Logout />} />
         <Route path="/role" element={<Role />} />
         <Route path="/courses" element={<Courses />} />
         <Route path="/course/:id" element={<Course />} />

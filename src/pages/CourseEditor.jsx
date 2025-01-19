@@ -31,7 +31,7 @@ export default function CourseEditor() {
   const [courseTitle, setCourseTitle] = useState("");
   const [courseDescription, setCourseDescription] = useState("");
   const [coursePrice, setCoursePrice] = useState({
-    priceType: "Free",
+    currency: "Free",
     amount: "0",
   });
   const [courseRewards, setCourseRewards] = useState({});
@@ -41,7 +41,7 @@ export default function CourseEditor() {
   const [sections, setSections] = useState([]);
   const [courseLoading, setCourseLoading] = useState(true);
 
-  let isFree = coursePrice.priceType === "Free";
+  let isFree = coursePrice.currency === "Free";
 
   // Fetch user data and default sections data
   useEffect(() => {
@@ -71,8 +71,17 @@ export default function CourseEditor() {
   useEffect(() => {
     const loadCourseData = async () => {
       try {
+        const token = localStorage.getItem("token");
         const response = await axios.get(`${API_URL}/api/courses/${id}`);
+        const section = await axios.get(`${API_URL}/api/courses/${id}/section`,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        )
         setCourse(response.data);
+        setSections(section.data.sectionData);
       } catch (err) {
         setError("Failed to fetch course details");
         console.error("Error fetching course:", err);
@@ -84,12 +93,6 @@ export default function CourseEditor() {
     loadCourseData();
   }, [id]);
 
-  const handleSections = () => {
-    if (!courseLoading) {
-      setSections(course.sections);
-    }
-  };
-
   useEffect(() => {
     const isOwnedCourse = () => {
       const isOwned = (course) => course.instructor._id != user._id;
@@ -100,7 +103,6 @@ export default function CourseEditor() {
         setCourseDescription(course.description);
         setCourseRewards(course.rewards);
         setCourseLevel(course.level);
-        handleSections();
       }
     };
 
@@ -139,8 +141,6 @@ export default function CourseEditor() {
     e.preventDefault();
 
     const token = localStorage.getItem("token");
-
-    setLoading(true);
     setMessage("");
 
     try {
@@ -194,24 +194,22 @@ export default function CourseEditor() {
       } else {
         setMessage("Save Course failed. Please try again later.");
       }
-    } finally {
-      setLoading(false);
     }
   };
 
   const modules = {
-    toolbar: [
-      [{ header: [1, 2, 3, 4, 5, 6, false] }],
-      ["bold", "italic", "underline", "strike"],
-      ["blockquote", "code-block"],
-      ["link", "image", "video"],
-      [{ list: "ordered" }, { list: "bullet" }],
-      [{ align: [] }],
-      ["clean"],
-    ],
+    toolbar: [[{ header: [1, 2, 3, 4, 5, 6, false] }], ["bold", "italic", "underline", "strike"], ["blockquote", "code-block"], ["link", "image", "video"], [{ list: "ordered" }, { list: "bullet" }], [{ align: [] }], ["clean"]],
   };
 
   const formats = ["header", "font", "size", "bold", "italic", "underline", "strike", "blockquote", "list", "bullet", "link", "image", "video", "code-block", "align"];
+
+  if(courseLoading){
+    return(<div>Loading...</div>)
+  }
+
+  if(error != ""){
+    navigate("/dashboard");
+  }
 
   return (
     <div className="min-h-screen w-screen bg-gray-100">
@@ -252,8 +250,8 @@ export default function CourseEditor() {
                   </label>
                   <div className="flex flex-row gap-2">
                     <select
-                      value={coursePrice.priceType}
-                      onChange={(e) => setCoursePrice((prevPrice) => ({ ...prevPrice, priceType: e.target.value }))}
+                      value={coursePrice.currency}
+                      onChange={(e) => setCoursePrice((prevPrice) => ({ ...prevPrice, currency: e.target.value }))}
                       placeholder="Price"
                       className="bg-white rounded-lg p-2 border-2 border-gray-200 w-28"
                       name="price"

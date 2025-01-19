@@ -95,7 +95,7 @@ const Dashboard = () => {
                       </div>
                       <div className="font-semibold w-full">{course.title}</div>
                       <div className="font-semibold w-48 text-center">{course.enrolledStudents.length}</div>
-                      <div className="font-semibold w-48 text-center">{course.length}</div>
+                      <div className="font-semibold w-48 text-center">{course.sections.length}</div>
                       <div className="font-semibold w-48 text-center">{course.price.amount === 0 ? "Free" : course.price.amount}</div>
                       <div className="font-semibold w-48 text-center flex flex-row gap-1">
                         <Link to={`/course/${course._id}/edit`}>

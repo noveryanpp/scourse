@@ -45,10 +45,16 @@ const userProgressSchema = new mongoose.Schema({
       },
       lastSection: {
         type: Number,
-        default: 0,
+        default: 1,
+      },
+      isFinished: {
+        type: Boolean,
+        default: false,
       },
     },
   ],
 });
 
 export default mongoose.model("UserProgress", userProgressSchema);
+
+

@@ -32,7 +32,7 @@ export default function CourseBuilder() {
   const [courseTitle, setCourseTitle] = useState("");
   const [courseDescription, setCourseDescription] = useState("");
   const [coursePrice, setCoursePrice] = useState({
-    priceType: "Free",
+    currency: "Free",
     amount: "0",
   });
   const [courseRewards, setCourseRewards] = useState({});
@@ -41,7 +41,7 @@ export default function CourseBuilder() {
   // const [courseRequirements, setCourseRequirements] = useState("");
   const [sections, setSections] = useState([]);
 
-  let isFree = coursePrice.priceType === "Free";
+  let isFree = coursePrice.currency === "Free";
 
   // Fetch user data and default sections data
   useEffect(() => {
@@ -286,11 +286,11 @@ export default function CourseBuilder() {
                   </label>
                   <div className="flex flex-row gap-2">
                     <select
-                      value={coursePrice.priceType}
+                      value={coursePrice.currency}
                       onChange={(e) =>
                         setCoursePrice((prevPrice) => ({
                           ...prevPrice,
-                          priceType: e.target.value,
+                          currency: e.target.value,
                         }))
                       }
                       placeholder="Price"

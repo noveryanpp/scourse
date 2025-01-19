@@ -419,14 +419,20 @@ export const getCourseSection = async (req, res) => {
     }
 
     const isEnrolled = course.enrolledStudents.includes(req.user._id);
-    const isInstructor = course.instructor.toString() === req.user._id.toString();
+    const isInstructor = course.instructor.toString() == req.user._id.toString();
 
     if (!isEnrolled && !isInstructor) {
       return res.status(403).json({ message: "Must be enrolled to view section" });
     }
 
     const sectionsLength = course.sections.length;
-    const sectionData = course.sections[req.params.sectionId - 1];
+    let sectionData;
+    if(req.params.sectionId == null){
+      sectionData = course.sections;
+    } else {
+      sectionData = course.sections[req.params.sectionId - 1];
+    }
+
     const section = { sectionData, sectionsLength };
 
     if (!section) {

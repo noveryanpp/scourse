@@ -26,10 +26,11 @@ router.get("/:id", getCourseById);
 router.use(protect);
 
 router.get("/:userId/ownedCourses", getUserCourses);
+router.get("/:courseId/section/:sectionId", getCourseSection);
+router.get("/:courseId/section/", getCourseSection);
 
 // Student routes
 router.post("/:id/enroll", enrollCourse);
-router.get("/:courseId/section/:sectionId", getCourseSection);
 router.post("/:id/reviews", addReview);
 router.put("/:id/reviews", updateReview);
 router.delete("/:id/reviews", deleteReview);

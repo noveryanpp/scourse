@@ -1,12 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import axios from "axios";
-import {
-  CircleStackIcon,
-  BanknotesIcon,
-  BoltIcon,
-  ClockIcon,
-} from "@heroicons/react/24/solid";
+import { CircleStackIcon, BanknotesIcon, BoltIcon, ClockIcon } from "@heroicons/react/24/solid";
 import { API_URL } from "../../utils/constants";
 
 const CourseHead = () => {
@@ -19,14 +14,11 @@ const CourseHead = () => {
     const fetchCourse = async () => {
       const token = localStorage.getItem("token");
       try {
-        const response = await axios.get(
-          `${API_URL}/api/courses/${id}`,
-          {
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
-          }
-        );
+        const response = await axios.get(`${API_URL}/api/courses/${id}`, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
         setCourse(response.data);
         setLoading(false);
       } catch (err) {
@@ -48,14 +40,10 @@ const CourseHead = () => {
   }
 
   if (error || !course) {
-    return (
-      <div className="flex items-center justify-center min-h-screen text-red-500">
-        {error || "Course not found"}
-      </div>
-    );
+    return <div className="flex items-center justify-center min-h-screen text-red-500">{error || "Course not found"}</div>;
   }
 
-  const enrollCourse = async () => {
+  const buyCourse = async () => {
     try {
       const token = localStorage.getItem("token");
       if (!token) {
@@ -65,7 +53,7 @@ const CourseHead = () => {
 
       const response = await axios({
         method: "post",
-        url: `${API_URL}/api/courses/${id}/enroll`,
+        url: `${API_URL}/api/progress/purchasecourse/${id}`,
         headers: {
           "Content-Type": "application/json",
           Accept: "application/json",
@@ -73,30 +61,22 @@ const CourseHead = () => {
         },
       });
     } catch (err) {
-      setError("Failed to enroll");
+      setError("Failed buy course");
       setLoading(false);
-      console.error("Error enroll course:", err);
+      console.error("Error buying course:", err);
     }
   };
 
   return (
     <div className="flex flex-col lg:flex-row max-w-7xl mx-auto p-4 md:pl-20 xl:pl-4">
       <div className="w-full lg:w-1/2">
-        <img
-          className="shadow-lg rounded-lg w-full h-auto object-cover"
-          src={course.thumbnail}
-          alt={course.title}
-        />
+        <img className="shadow-lg rounded-lg w-full h-auto object-cover" src={course.thumbnail} alt={course.title} />
       </div>
       <div className="flex flex-col w-full lg:w-1/2 lg:pl-8 py-4">
         <div className="flex flex-col-reverse lg:flex-row">
-          <h2 className="text-2xl md:text-3xl font-semibold text-indigo-600">
-            {course.title}
-          </h2>
+          <h2 className="text-2xl md:text-3xl font-semibold text-indigo-600">{course.title}</h2>
           <div className="flex gap-2 lg:ml-auto mb-2 lg:mb-auto mt-2">
-            <span className="bg-gradient-to-r from-green-600 to-teal-600 text-white text-xs text-center font-semibold px-2 py-1 rounded shadow-lg">
-              {course.level}
-            </span>
+            <span className="bg-gradient-to-r from-green-600 to-teal-600 text-white text-xs text-center font-semibold px-2 py-1 rounded shadow-lg">{course.level}</span>
             {/* <span className="bg-gradient-to-r from-blue-600 to-indigo-600 text-white text-xs text-center font-semibold px-2 py-1 rounded shadow-lg">
                             {course.category}
                         </span> */}
@@ -121,25 +101,20 @@ const CourseHead = () => {
 
         <div className="flex mt-auto flex-col md:flex-row">
           <div className="">
-            <p className="text-md font-semibold my-2 text-indigo-600">
-              Rewards from this Course:
-            </p>
+            <p className="text-md font-semibold my-2 text-indigo-600">Rewards from this Course:</p>
             <span className="bg-gradient-to-r from-orange-600 to-red-600 text-white text-xs text-center font-semibold px-2 py-1 rounded me-2 shadow-lg">
-              <CircleStackIcon className="w-4 h-4 inline text-yellow-300" />+
-              {course.rewards.scoin}
+              <CircleStackIcon className="w-4 h-4 inline text-yellow-300" />+{course.rewards.scoin}
             </span>
             <span className="bg-gradient-to-r from-purple-600 to-pink-600 text-white text-xs text-center font-semibold px-2 py-1 rounded me-2 shadow-lg">
-              <BoltIcon className="w-4 h-4 inline text-yellow-300" />+
-              {course.rewards.score}
+              <BoltIcon className="w-4 h-4 inline text-yellow-300" />+{course.rewards.score}
             </span>
           </div>
           <div className="flex mt-4 md:ml-auto md:mt-auto">
             <button
-              onClick={enrollCourse}
+              onClick={buyCourse}
               className="flex-1 text-white bg-gradient-to-r from-blue-600 to-indigo-600 hover:text-blue-300 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-md px-5 py-2.5 text-center shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 transition-all duration-200"
             >
-              Buy Course for{" "}
-              {course.price.amount === 0 ? "Free" : course.price.amount}
+              Buy Course for {course.price.amount === 0 ? "Free" : course.price.amount}
             </button>
           </div>
         </div>
@@ -148,9 +123,7 @@ const CourseHead = () => {
         <div className="mt-4 grid grid-cols-2 gap-4 bg-gray-50 p-4 rounded-lg">
           <div>
             <p className="text-sm text-gray-600">Students Enrolled</p>
-            <p className="text-lg font-semibold text-gray-900">
-              {course.enrolledStudents.length}
-            </p>
+            <p className="text-lg font-semibold text-gray-900">{course.enrolledStudents.length}</p>
           </div>
           <div>
             <p className="text-sm text-gray-600">Rating</p>
