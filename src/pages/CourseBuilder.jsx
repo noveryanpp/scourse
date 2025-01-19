@@ -428,7 +428,7 @@ export default function CourseBuilder() {
                   className="inline-block p-4 border-2 border-gray-200 rounded-t-lg hover:text-gray-600 hover:border-gray-300 bg-white text-gray-900"
                   type="button"
                   onClick={() => {
-                    setSections([...sections, { title: "", content: "" }]);
+                    setSections([...sections, { title: "Section Title Example", content: "<h1>Section Content Example</h1><p>This is a paragraph</p>" }]);
                     console.log(sections);
                   }}
                 >

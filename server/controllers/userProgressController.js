@@ -22,7 +22,7 @@ export const getUserProgress = async (req, res) => {
 
 export const getAllUserProgress = async (req, res) => {
   try {
-    const userProgress = await UserProgress.findOne({ user: req.params.id });
+    const userProgress = await UserProgress.find({}).populate('user', 'username');
     if (userProgress) {
       res.json(userProgress);
     } else {

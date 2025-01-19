@@ -1,11 +1,12 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import { PencilSquareIcon } from "@heroicons/react/24/solid";
-
+import { ArrowRightStartOnRectangleIcon, PencilSquareIcon } from "@heroicons/react/24/solid";
+import { useNavigate } from "react-router-dom";
 import { useUser } from "../../hooks/useUser";
 
 const Profile = () => {
   const { user, loading } = useUser();
+  const navigate = useNavigate();
 
   return (
     <div className="bg-gradient-to-r from-cyan-600 to-sky-600 flex pt-12 md:pt-20 xl:pt-28 pb-6">
@@ -26,6 +27,9 @@ const Profile = () => {
                   <div>
                     <button className="border-2 border-white bg-transparent p-1 mr-2 text-white hover:border-white hover:text-sky-600 hover:bg-white shadow-lg">
                       <PencilSquareIcon className="w-8 h-8" />
+                    </button>
+                    <button className="border-2 border-white bg-transparent p-1 mr-2 text-white hover:border-white hover:text-sky-600 hover:bg-white shadow-lg" onClick={() => navigate('/logout')} >
+                      <ArrowRightStartOnRectangleIcon className="w-8 h-8" />
                     </button>
                   </div>
                 </div>

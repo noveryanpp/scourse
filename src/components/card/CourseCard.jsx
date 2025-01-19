@@ -5,7 +5,7 @@ import { CircleStackIcon, BanknotesIcon, BoltIcon, StarIcon, UserGroupIcon } fro
 const CourseCard = ({ course }) => {
   return (
     <Link to={`/course/${course._id}`} className="block">
-      <div className="group max-w-xs 2xl:max-w-72 xl:max-w-sm lg:max-w-md md:max-w-md sm:max-w-screen bg-white border border-gray-200 rounded-lg shadow-lg hover:shadow-xl hover:-translate-y-1 duration-300 ease-in-out">
+      <div className="group max-w-xs xl:max-w-sm lg:max-w-md md:max-w-md sm:max-w-screen bg-white border border-gray-200 rounded-lg shadow-lg hover:shadow-xl hover:-translate-y-1 duration-300 ease-in-out">
         <img className="rounded-t-lg object-cover h-40 w-full" src={course.thumbnail.url} alt={course.title} />
         <div className="p-5">
           <h5 className="text-xl font-semibold tracking-tight text-gray-900 group-hover:text-blue-600 transition-color duration-300">{course.title}</h5>

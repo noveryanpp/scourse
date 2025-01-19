@@ -9,8 +9,12 @@ import { MagnifyingGlassIcon, ChevronDoubleLeftIcon, XMarkIcon } from "@heroicon
 
 const Courses = () => {
   const [courses, setCourses] = useState([]);
+  const [filteredCourses, setFilteredCourses] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+
+  const [query, setQuery] = useState("");
+  const [priceFilter, setPriceFilter] = useState([]);
 
   const pageTitle = "Courses";
   const pageDescription = "Find and Join Free or Paid Courses";
@@ -46,6 +50,24 @@ const Courses = () => {
     fetchCourses();
   }, []);
 
+  useEffect(() => {
+    const results = courses.filter((course) => {
+      const matchesQuery = courses.filter((course) => course.title.toLowerCase().includes(query.toLowerCase()));
+      const matchesPrice = priceFilter.length === 0 || priceFilter.includes(course.price.currency);
+      return matchesQuery && matchesPrice;
+    });
+    setFilteredCourses(results);
+  }, [courses, query, priceFilter]);
+
+  const handlePriceFilter = (e) => {
+    const { value, checked } = e.target;
+    if (checked) {
+      setPriceFilter([...priceFilter, value]);
+    } else {
+      setPriceFilter(priceFilter.filter((price) => price !== value));
+    }
+  };
+
   return (
     <div>
       <Sidebar />
@@ -55,20 +77,23 @@ const Courses = () => {
         </div>
 
         <div className="mx-auto py-6 px-2 md:px-6 lg:px-8">
-          <div className="max-w-7xl flex flex-wrap gap-4 mx-auto justify-center">
-            {loading ? (
-              <div className="flex items-center justify-center w-full p-4">
-                <div className="animate-spin rounded-full h-8 w-8 border-t-2 border-b-2 border-indigo-500"></div>
-              </div>
-            ) : error ? (
-              <div className="text-red-500 p-4">{error}</div>
-            ) : (
-              courses.map((course) => (
-                <div key={course._id} className="flex-none snap-start w-80">
-                  <CourseCard course={course} />
+          <div className="max-w-7xl mx-auto">
+            <h2 className="text-gray-900 text-center mb-4">Total {filteredCourses.length} Courses</h2>
+            <div className="flex flex-wrap gap-2 justify-center">
+              {loading ? (
+                <div className="flex items-center justify-center w-full p-4">
+                  <div className="animate-spin rounded-full h-8 w-8 border-t-2 border-b-2 border-indigo-500"></div>
                 </div>
-              ))
-            )}
+              ) : error ? (
+                <div className="text-red-500 p-4">{error}</div>
+              ) : (
+                filteredCourses.map((course) => (
+                  <div key={course._id} className="flex-none snap-start w-80 mb-2">
+                    <CourseCard course={course} />
+                  </div>
+                ))
+              )}
+            </div>
           </div>
         </div>
 
@@ -90,10 +115,56 @@ const Courses = () => {
                   id="default-search"
                   className="block w-full p-2 mr-2 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500"
                   placeholder="Search Courses..."
+                  onChange={(e) => setQuery(e.target.value)}
                 />
                 <button type="submit" className="text-white bg-blue-600 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm p-1">
                   <MagnifyingGlassIcon className="w-7  h-7" />
                 </button>
+              </div>
+              <div id="pricefilter" className="flex flex-col justify-left ml-2 mt-4">
+                <h2 className="text-lg text-gray-900 font-semibold">Price</h2>
+                <div key="Free">
+                  <input
+                    id="price"
+                    type="checkbox"
+                    value="Free"
+                    name="price"
+                    className="w-4 h-4 text-blue-500 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 focus:ring-2"
+                    checked={priceFilter.includes("Free")}
+                    onChange={handlePriceFilter}
+                  />
+                  <label htmlFor="price" className="ml-2 text-gray-900">
+                    Free
+                  </label>
+                </div>
+                <div key="Scoin">
+                  <input
+                    id="price"
+                    type="checkbox"
+                    value="Scoin"
+                    name="price"
+                    className="w-4 h-4 text-blue-500 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 focus:ring-2"
+                    checked={priceFilter.includes("Scoin")}
+                    onChange={handlePriceFilter}
+                  />
+                  <label htmlFor="price" className="ml-2 text-gray-900">
+                    Scoin
+                  </label>
+                </div>
+                <div key="Scash">
+                  <input
+                    id="price"
+                    type="checkbox"
+                    value="Scash"
+                    name="price"
+                    className="w-4 h-4 text-blue-500 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 focus:ring-2"
+                    checked={priceFilter.includes("Scash")}
+                    onChange={handlePriceFilter}
+                  />
+                  <label htmlFor="price" className="ml-2 text-gray-900">
+                    Scash
+                  </label>
+                </div>
               </div>
               <div id="categoryfilter" className="flex flex-col justify-left ml-2 mt-4">
                 <h2 className="text-lg text-gray-900 font-semibold">Category</h2>

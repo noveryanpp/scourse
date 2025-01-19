@@ -36,9 +36,9 @@ const Hero = () => {
               </p>
 
               <div className="flex flex-col sm:flex-row gap-4">
-                <Link to="/register" 
+                <Link to="/courses" 
                   className="group inline-flex items-center px-8 py-4 rounded-2xl text-white bg-gradient-to-r from-blue-600 via-blue-700 to-purple-600 hover:from-blue-700 hover:via-blue-800 hover:to-purple-700 shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 transition-all duration-200">
-                  Get Started Free
+                  View Courses
                   <ArrowRightIcon className="w-5 h-5 ml-2 group-hover:translate-x-1 transition-transform duration-200" />
                 </Link>
                 <Link to="/demo" 

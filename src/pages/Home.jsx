@@ -7,6 +7,7 @@ import CourseCard from "../components/card/CourseCard";
 import { API_URL } from "../utils/constants";
 
 import { useUser } from "../hooks/useUser";
+import { GoldenChest } from "../components/chest";
 
 const Home = () => {
   const { user, loading } = useUser();

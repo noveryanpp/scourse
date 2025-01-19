@@ -4,7 +4,7 @@ import { toast } from "react-toastify";
 const ToastContext = createContext();
 
 export const ToastProvider = ({ children }) => {
-  const notify = (message, options, type) => {
+  const notify = (message, options, type, promise) => {
     switch (type) {
       case "success":
         toast.success(message, options);
@@ -18,9 +18,13 @@ export const ToastProvider = ({ children }) => {
       case "warning":
         toast.warning(message, options);
         break;
+      case "promise":
+        toast.promise(promise, message, options);
+        break;
       default:
         toast(message, options);
-    }1
+    }
+    1;
   };
 
   return <ToastContext.Provider value={notify}>{children}</ToastContext.Provider>;

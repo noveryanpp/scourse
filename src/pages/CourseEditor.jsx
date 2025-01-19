@@ -75,13 +75,11 @@ export default function CourseEditor() {
       try {
         const token = localStorage.getItem("token");
         const response = await axios.get(`${API_URL}/api/courses/${id}`);
-        const section = await axios.get(`${API_URL}/api/courses/${id}/section`,
-          {
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
-          }
-        )
+        const section = await axios.get(`${API_URL}/api/courses/${id}/section`, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
         setCourse(response.data);
         setSections(section.data.sectionData);
       } catch (err) {
@@ -137,14 +135,13 @@ export default function CourseEditor() {
     reader.onloadend = () => {
       setThumbnailBase64(reader.result);
     };
-    
   };
 
   const handleThumbnail = (e) => {
     const file = e.target.files[0];
     setThumbnail(file);
     setFileToBase64(file);
-    console.log(file)
+    console.log(file);
   };
 
   // Function for handling sections delete
@@ -221,11 +218,11 @@ export default function CourseEditor() {
 
   const formats = ["header", "font", "size", "bold", "italic", "underline", "strike", "blockquote", "list", "bullet", "link", "image", "video", "code-block", "align"];
 
-  if(courseLoading){
-    return(<div>Loading...</div>)
+  if (courseLoading) {
+    return <div>Loading...</div>;
   }
 
-  if(error != ""){
+  if (error != "") {
     navigate("/dashboard");
   }
 
@@ -361,7 +358,7 @@ export default function CourseEditor() {
                   className="inline-block p-4 border-2 border-gray-200 rounded-t-lg hover:text-gray-600 hover:border-gray-300 bg-white text-gray-900"
                   type="button"
                   onClick={() => {
-                    setSections([...sections, { title: "", content: "" }]);
+                    setSections([...sections, { title: "Section Title Example", content: "<h1>Section Content Example</h1><p>This is a paragraph</p>" }]);
                     console.log(sections);
                   }}
                 >
