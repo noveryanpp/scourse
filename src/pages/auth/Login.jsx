@@ -9,6 +9,11 @@ function Login() {
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
   const [message, setMessage] = useState("");
+  const token = localStorage.getItem("token")
+
+  if(token){
+    navigate('/home')
+  }
 
   const onSubmit = async (e) => {
     let credential = userCredential.trim().toLowerCase();

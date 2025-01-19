@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Link, useLocation } from "react-router-dom";
 import axios from "axios";
-import { Bars3Icon, XMarkIcon, HomeIcon, AcademicCapIcon, ChartBarIcon, ShoppingBagIcon, StarIcon, UserIcon, ChatBubbleLeftIcon, BellIcon, CircleStackIcon, BanknotesIcon, BoltIcon } from "@heroicons/react/24/outline";
+import { Bars3Icon, XMarkIcon, HomeIcon, AcademicCapIcon, ChartBarIcon, ShoppingBagIcon, StarIcon, UserIcon, ChatBubbleLeftIcon, BellIcon, CircleStackIcon, BanknotesIcon, BoltIcon, SquaresPlusIcon } from "@heroicons/react/24/outline";
 import { API_URL } from '../../utils/constants'
 import { useUser, useUserProgress } from "../../hooks/useUser";
 
@@ -11,9 +11,27 @@ function Sidebar() {
   const { user, loading } = useUser();
   const [loadingUserProgress, setLoadingUserProgress] = useState(true)
   const [userProgress, setUserProgress] = useState([]);
+  const [menuItems, setMenuItems] = useState([]);
+
+  const studentMenuItems = [
+    { name: "Home", path: "/home", icon: HomeIcon },
+    { name: "Courses", path: "/courses", icon: AcademicCapIcon },
+    { name: "Leaderboard", path: "/leaderboard", icon: ChartBarIcon },
+    { name: "Shop", path: "/shop", icon: ShoppingBagIcon },
+    { name: "Quests", path: "/quests", icon: StarIcon },
+    { name: "Forum", path: "/forum", icon: ChatBubbleLeftIcon },
+    { name: "Account", path: "/account", icon: UserIcon },
+  ];
+
+  const instructorMenuItems = [
+    { name: "Home", path: "/home", icon: HomeIcon },
+    { name: "Dashboard", path: "/dashboard", icon: SquaresPlusIcon },
+    { name: "Forum", path: "/forum", icon: ChatBubbleLeftIcon },
+    { name: "Account", path: "/account", icon: UserIcon },
+  ]
 
   useEffect(() => {
-    if (!loading) {
+    if (!loading && user.role === "student") {
       const fetchUserProgress = async () => {
         try {
           const response = await axios.get(`${API_URL}/api/progress/${user._id}`);
@@ -24,19 +42,11 @@ function Sidebar() {
         }
       }
       fetchUserProgress();
+      setMenuItems(studentMenuItems);
+    }else if(!loading && user.role === "instructor"){
+      setMenuItems(instructorMenuItems)
     }
   }, [loading]);
-
-
-  const menuItems = [
-    { name: "Home", path: "/home", icon: HomeIcon },
-    { name: "Courses", path: "/courses", icon: AcademicCapIcon },
-    { name: "Leaderboard", path: "/leaderboard", icon: ChartBarIcon },
-    { name: "Shop", path: "/shop", icon: ShoppingBagIcon },
-    { name: "Quests", path: "/quests", icon: StarIcon },
-    { name: "Forum", path: "/forum", icon: ChatBubbleLeftIcon },
-    { name: "Account", path: "/account", icon: UserIcon },
-  ];
 
   return (
     <div className="min-h-screen">
@@ -56,14 +66,14 @@ function Sidebar() {
             </div>
 
             <div className="flex items-center gap-4">
-              {!loadingUserProgress ? 
+              {!loadingUserProgress && user.role === "student" ? 
                 <div className="flex flex-wrap grap-2 text-gray-900 text-md">
                   <div className="mx-2"><BoltIcon className="2-6 h-6 inline"/>{userProgress.scores}</div>
                   <div className="mx-2"><CircleStackIcon className="2-6 h-6 inline"/>{userProgress.scoins}</div>
                   <div className="mx-2"><BanknotesIcon className="2-6 h-6 inline"/>{userProgress.scashes}</div>
                 </div> 
                   : 
-                <div>Loading...</div>
+                <div></div>
               }
 
               <Link to="/account" className="flex items-center gap-3 p-1.5 rounded-xl hover:bg-blue-50 transition-all duration-200">
@@ -86,7 +96,7 @@ function Sidebar() {
       <div className={`bg-white/60 backdrop-blur-md shadow-sm fixed inset-y-0 left-0 ${isSidebarOpen ? "w-64" : "w-0 md:w-16"} duration-300 ease-in-out bg-white border-r border-gray-200 z-40 pt-16`}>
         <div className="h-full overflow-y-auto overflow-x-hidden">
           <nav className="mt-5 space-y-2">
-            {menuItems.map((item) => {
+            {!loading ? menuItems.map((item) => {
               const isActive = location.pathname === item.path;
               return (
                 <Link
@@ -98,7 +108,7 @@ function Sidebar() {
                   {item.name}
                 </Link>
               );
-            })}
+            }) : (<div></div>)}
           </nav>
         </div>
       </div>

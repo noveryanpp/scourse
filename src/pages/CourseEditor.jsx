@@ -40,6 +40,8 @@ export default function CourseEditor() {
   // const [courseRequirements, setCourseRequirements] = useState("");
   const [sections, setSections] = useState([]);
   const [courseLoading, setCourseLoading] = useState(true);
+  const [thumbnail, setThumbnail] = useState(null);
+  const [thumbnailBase64, setThumbnailBase64] = useState("");
 
   let isFree = coursePrice.currency === "Free";
 
@@ -129,6 +131,22 @@ export default function CourseEditor() {
     setSections(newSections);
   }
 
+  const setFileToBase64 = (file) => {
+    const reader = new FileReader();
+    reader.readAsDataURL(file);
+    reader.onloadend = () => {
+      setThumbnailBase64(reader.result);
+    };
+    
+  };
+
+  const handleThumbnail = (e) => {
+    const file = e.target.files[0];
+    setThumbnail(file);
+    setFileToBase64(file);
+    console.log(file)
+  };
+
   // Function for handling sections delete
   function handleDelete(id) {
     setSections((oldValues) => {
@@ -148,7 +166,7 @@ export default function CourseEditor() {
         title: courseTitle,
         description: courseDescription,
         instructor: user._id,
-        thumbnail: "test.png",
+        thumbnailImage: thumbnailBase64,
         price: coursePrice,
         rewards: {
           score: courseLevel === "Advanced" ? 100 * sections.length : courseLevel === "Intermediate" ? 80 * sections.length : 50 * sections.length,
@@ -241,9 +259,16 @@ export default function CourseEditor() {
                   <textarea value={courseDescription} onChange={(e) => setCourseDescription(e.target.value)} placeholder="Description" className="bg-white rounded-lg p-2 border-2 border-gray-200" name="description"></textarea>
 
                   <label htmlFor="sectionthumbnail" className="text-xl font-semibold">
-                    Upload Thumbnail
+                    Upload New Thumbnail
                   </label>
-                  <input className="bg-white text-sm text-gray-900 border-2 border-gray-200 rounded-lg cursor-pointer bg-gray-50 focus:outline-none" id="sectionthumbnail" type="file" />
+                  <input
+                    class="bg-white text-sm text-gray-900 border-2 border-gray-200 rounded-lg cursor-pointer bg-gray-50 focus:outline-none"
+                    id="thumbnail"
+                    placeholder="Upload Thumbnail"
+                    type="file"
+                    accept="image/*"
+                    onChange={handleThumbnail}
+                  />
 
                   <label htmlFor="price" className="text-xl font-semibold">
                     Price

@@ -45,7 +45,7 @@ const userProgressSchema = new mongoose.Schema({
       },
       lastSection: {
         type: Number,
-        default: 1,
+        default: 0,
       },
       isFinished: {
         type: Boolean,

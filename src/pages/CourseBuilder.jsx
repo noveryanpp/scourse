@@ -40,6 +40,8 @@ export default function CourseBuilder() {
   // const [courseObjectives, setCourseObjectives] = useState("");
   // const [courseRequirements, setCourseRequirements] = useState("");
   const [sections, setSections] = useState([]);
+  const [thumbnail, setThumbnail] = useState(null);
+  const [thumbnailBase64, setThumbnailBase64] = useState("");
 
   let isFree = coursePrice.currency === "Free";
 
@@ -106,6 +108,22 @@ export default function CourseBuilder() {
     setSections(newSections);
   }
 
+  const setFileToBase64 = (file) => {
+    const reader = new FileReader();
+    reader.readAsDataURL(file);
+    reader.onloadend = () => {
+      setThumbnailBase64(reader.result);
+    };
+    
+  };
+
+  const handleThumbnail = (e) => {
+    const file = e.target.files[0];
+    setThumbnail(file);
+    setFileToBase64(file);
+    console.log(file)
+  };
+
   // Function for handling sections delete
   function handleDelete(id) {
     setSections((oldValues) => {
@@ -126,7 +144,7 @@ export default function CourseBuilder() {
       const requestData = {
         title: courseTitle,
         description: courseDescription,
-        thumbnail: "test.png",
+        thumbnailImage: thumbnailBase64,
         price: coursePrice,
         rewards: {
           score:
@@ -192,7 +210,7 @@ export default function CourseBuilder() {
       [{ header: [1, 2, 3, 4, 5, 6, false] }],
       ["bold", "italic", "underline", "strike"],
       ["blockquote", "code-block"],
-      ["link", "image", "video"],
+      ["link"],
       [{ list: "ordered" }, { list: "bullet" }],
       [{ align: [] }],
       ["clean"],
@@ -277,8 +295,11 @@ export default function CourseBuilder() {
                   </label>
                   <input
                     class="bg-white text-sm text-gray-900 border-2 border-gray-200 rounded-lg cursor-pointer bg-gray-50 focus:outline-none"
-                    id="sectionthumbnail"
+                    id="thumbnail"
+                    placeholder="Upload Thumbnail"
                     type="file"
+                    accept="image/*"
+                    onChange={handleThumbnail}
                   />
 
                   <label htmlFor="price" className="text-xl font-semibold">

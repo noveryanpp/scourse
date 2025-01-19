@@ -117,12 +117,12 @@ export const purchaseCourse = async (req, res) => {
           },
           { new: true }
         );
-        res.json({ message: "Course Purchased" });
+        res.json({ message: "Course Purchased", status: "success" });
       } catch (err) {
-        res.status(400).json({ message: error.message });
+        res.status(400).json({ message: error.message, status: "warn" });
       }
     } else {
-      res.json({ message: `You don't have enough ${course.price.currency}` });
+      res.json({ message: `You don't have enough ${course.price.currency}!`, status: "warn" });
     }
   } catch (err) {
     res.status(400).json({ message: error.message });
@@ -222,7 +222,7 @@ export const updateCourseProgress = async (req, res) => {
 
         msg = "Course completed! Rewards given.";
       } else {
-        msg ="Section completed!";
+        msg = "Section "+course.lastSection+" completed!";
       }
 
       // Save the updated user progress

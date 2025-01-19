@@ -6,12 +6,10 @@ import PageHead from "../components/layout/PageHead";
 import { PencilSquareIcon, TrashIcon } from "@heroicons/react/24/outline";
 import { API_URL } from "../utils/constants";
 
-import { useUser } from "../hooks/useUser"
-
-
+import { useUser } from "../hooks/useUser";
 
 const Dashboard = () => {
-  const {user, loading} = useUser();
+  const { user, loading } = useUser();
   const pageTitle = "Dashboard";
   const pageDescription = "Manage your Courses!!!";
   const pageHeadBackground = "from-purple-600 to-pink-600";
@@ -41,10 +39,8 @@ const Dashboard = () => {
     } else if (user) {
       fetchCourses();
       console.log("User is an instructor, access granted to Dashboard");
-    };
+    }
   }, [loading]);
-
-  if (loading) return <div>Loading...</div>;
 
   const handleDelete = async (courseId) => {
     const token = localStorage.getItem("token");
@@ -87,28 +83,37 @@ const Dashboard = () => {
                     <div className="font-semibold w-48 text-center"></div>
                   </div>
                   <div className="h-px bg-gradient-to-r from-transparent via-gray-200 to-transparent"></div>
-                  {courses.map((course, index) => (
-                    <div key={course._id} className="flex flex-row items-center">
-                      <div className="w-48 flex flex-row items-center">
-                        <div className="font-semibold pr-5">{index + 1}</div>
-                        <div className="flex w-12 h-12 rounded-full bg-white/10 items-center justify-center"></div>
-                      </div>
-                      <div className="font-semibold w-full">{course.title}</div>
-                      <div className="font-semibold w-48 text-center">{course.enrolledStudents.length}</div>
-                      <div className="font-semibold w-48 text-center">{course.sections.length}</div>
-                      <div className="font-semibold w-48 text-center">{course.price.amount === 0 ? "Free" : course.price.amount}</div>
-                      <div className="font-semibold w-48 text-center flex flex-row gap-1">
-                        <Link to={`/course/${course._id}/edit`}>
-                          <button className="bg-transparent p-1 border-0 hover:text-blue-600">
-                            <PencilSquareIcon className="w-6 h-6" />
-                          </button>
-                        </Link>
-                        <button className="bg-transparent p-1 border-0 hover:text-blue-600" onClick={() => handleDelete(course._id)}>
-                          <TrashIcon className="w-6 h-6" />
-                        </button>
-                      </div>
+                  {loading ? (
+                    <div className="flex items-center justify-center w-full p-4">
+                      <div className="animate-spin rounded-full h-8 w-8 border-t-2 border-b-2 border-indigo-500"></div>
                     </div>
-                  ))}
+                  ) : error ? (
+                    <div className="text-red-500 p-4">{error}</div>
+                  ) : (
+                    courses.map((course, index) => (
+                      <div key={course._id} className="flex flex-row items-center">
+                        <div className="w-48 flex flex-row items-center">
+                          <div className="font-semibold pr-5">{index + 1}</div>
+                          <div className="flex w-12 h-12 rounded-full bg-white/10 items-center justify-center"></div>
+                        </div>
+                        <div className="font-semibold w-full">{course.title}</div>
+                        <div className="font-semibold w-48 text-center">{course.enrolledStudents.length}</div>
+                        <div className="font-semibold w-48 text-center">{course.sections.length}</div>
+                        <div className="font-semibold w-48 text-center">{course.price.amount === 0 ? "Free" : course.price.amount}</div>
+                        <div className="font-semibold w-48 text-center flex flex-row gap-1">
+                          <Link to={`/course/${course._id}/edit`}>
+                            <button className="bg-transparent p-1 border-0 hover:text-blue-600">
+                              <PencilSquareIcon className="w-6 h-6" />
+                            </button>
+                          </Link>
+                          <button className="bg-transparent p-1 border-0 hover:text-blue-600" onClick={() => handleDelete(course._id)}>
+                            <TrashIcon className="w-6 h-6" />
+                          </button>
+                        </div>
+                      </div>
+                    ))
+                  )}
+
                   <div className="h-px bg-gradient-to-r from-transparent via-gray-200 to-transparent"></div>
                   <div className="flex flex-row items-center">
                     <div className="font-semibold mx-auto">

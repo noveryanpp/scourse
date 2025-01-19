@@ -8,6 +8,7 @@ import "./Section.css";
 import { ChevronLeftIcon, ChevronRightIcon } from "@heroicons/react/24/solid";
 import { API_URL } from "../../utils/constants"
 import { useUser } from "../../hooks/useUser"
+import { useToast } from "../../context/toastContext"
 
 const Section = () => {
   const { user, loading } = useUser()
@@ -16,6 +17,7 @@ const Section = () => {
   const [totalSection, setTotalSection] = useState("");
   const [sectionLoading, setSectionLoading] = useState(true);
   const [error, setError] = useState(null);
+  const notify = useToast();
 
   useEffect(() => {
     const fetchSection = async () => {
@@ -56,8 +58,8 @@ const Section = () => {
       const token = localStorage.getItem("token");
       const userProgress = await axios.get(`${API_URL}/api/progress/${user._id}`);
       const userCourseProgress = userProgress.data.courses.find(course => course.courseId.toString() === courseId.toString());
-      console.log(userCourseProgress.lastSection.toString())
-      if(sectionId === userCourseProgress.lastSection.toString()){
+      const lastSection = userCourseProgress.lastSection + 1
+      if(sectionId === lastSection.toString()){
         const response = await axios(`${API_URL}/api/progress/${courseId}/finishsection`, {
           method: "post",
           url: `${API_URL}/api/progress/${courseId}/finishsection`, 
@@ -65,9 +67,12 @@ const Section = () => {
             Authorization: `Bearer ${token}`,
           },
         })
-        console.log(response.data.message)
-      } else if(sectionId > userCourseProgress.lastSection.toString()){
-        console.log("You haven't finished section ", userCourseProgress.lastSection)
+        if(response.data.message != ""){
+          notify(response.data.message, {autoClose:5000}, "success")
+        }
+      } else if(sectionId > lastSection.toString()){
+        notify("You haven't finished section "+lastSection+"! Rewards will not be granted", {autoClose:5000}, "warning")
+        console.log("You haven't finished section ", lastSection)
       }
     } catch (error) {
       setError(error.message);

@@ -1,6 +1,6 @@
 import mongoose from "mongoose";
-
 import Course from "../models/Course.js";
+import { uploadToCloudinary } from "../services/cloudinary.js"
 
 // export const getCourses = async (req, res) => {
 //   try {
@@ -148,7 +148,18 @@ export const getCourseById = async (req, res) => {
         },
       },
       {
-        $addFields: { length: { $size: "$sections" } },
+        $addFields: { 
+          length: { $size: "$sections" },
+          sectionsList: {
+            $map: {
+              input: "$sections",
+              as: "section",
+              in: {
+                title: "$$section.title",
+              }
+            }
+          }
+        },
       },
       {
         $unset: ["sections"],
@@ -199,8 +210,14 @@ export const getCourseById = async (req, res) => {
 
 export const createCourse = async (req, res) => {
   try {
+    let imageData = {}
+    if(req.body.thumbnailImage){
+        const results = await uploadToCloudinary(req.body.thumbnailImage, "scourse")
+        imageData = results;
+    }
     const course = new Course({
       ...req.body,
+      thumbnail: imageData,
       instructor: req.user._id,
     });
     const newCourse = await course.save();
@@ -225,7 +242,13 @@ export const updateCourse = async (req, res) => {
       return res.status(401).json({ message: "Not authorized" });
     }
 
-    const updatedCourse = await Course.findByIdAndUpdate(req.params.id, { ...req.body }, { new: true }).populate("instructor", "username fullName");
+    let imageData = {}
+    if(req.body.thumbnailImage){
+        const results = await uploadToCloudinary(req.body.thumbnailImage, "scourse")
+        imageData = results;
+    }
+
+    const updatedCourse = await Course.findByIdAndUpdate(req.params.id, { ...req.body, thumbnail: imageData }, { new: true }).populate("instructor", "username fullName");
 
     res.json(updatedCourse);
   } catch (error) {
@@ -427,7 +450,7 @@ export const getCourseSection = async (req, res) => {
 
     const sectionsLength = course.sections.length;
     let sectionData;
-    if(req.params.sectionId == null){
+    if (req.params.sectionId == null) {
       sectionData = course.sections;
     } else {
       sectionData = course.sections[req.params.sectionId - 1];
